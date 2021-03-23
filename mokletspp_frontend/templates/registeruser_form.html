@@ -1,0 +1,112 @@
+{% extends 'base_url.html' %}
+{% block registeruser_form %}
+<div class="main-panel">
+			<div class="content">
+				<div class="page-inner">
+					<div class="page-header">
+						<h4 class="page-title">Profile</h4>
+						<ul class="breadcrumbs">
+							<li class="nav-home">
+								<a href="#">
+									<i class="flaticon-home"></i>
+								</a>
+							</li>
+							<li class="separator">
+								<i class="flaticon-right-arrow"></i>
+							</li>
+							<li class="nav-item">
+								<a href="#">Dashboard</a>
+							</li>
+							<li class="separator">
+								<i class="flaticon-right-arrow"></i>
+							</li>
+							<li class="nav-item">
+								<a href="#">Profileku</a>
+							</li>
+						</ul>
+					</div>
+
+
+					<div class="row">
+						<div class="col-md-6">
+							<div class="card">
+								<div class="card-header">
+									<div class="card-title">Tambah Data User</div>
+								</div>
+
+								<form id="register_form" method="post" action="" class="card-body">
+									{% csrf_token %}
+									<div class="form-group">
+										<label for="email">Email Address</label>
+										<input type="email" class="form-control"  name="email" id="email" placeholder="Enter Email">
+									</div>
+                                     <div class="form-group">
+										<label for="username">Username</label>
+										<input type="text" name="username"  class="form-control" id="username" placeholder="Password">
+									</div>
+									<div class="form-group">
+										<label for="id_password1">Password</label>
+										<input type="password" name="password" class="form-control" id="id_password1" placeholder="Password">
+										<small id="emailHelp2" class="form-text text-muted">Password Minimal 8 Kata.</small>
+
+									</div>
+                                   <div class="form-group">
+										<label for="id_password2">Verifikasi Password</label>
+										<input type="password" name="password2" class="form-control" id="id_password2" placeholder="Password">
+									</div>
+                                    <div class="form-group">
+										<label for="exampleFormControlSelect1">Pilih Role</label>
+										<select class="form-control" name="role" id="exampleFormControlSelect1">
+											<option value="admin">Admin</option>
+											<option value="petugas">Petugas</option>
+											<option value="siswa">Siswa</option>
+										</select>
+									</div>
+								<div class="card-action">
+									<button id="submit_request" class="btn btn-primary">Submit</button>
+									<button class="btn btn-danger">Cancel</button>
+								</div>
+                                </form>
+							</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+</div>
+	{% if authenticated.role == "siswa" %}
+					<script>
+								swal('Akses Ditolak', 'Anda Bukan Admin','error')
+								</script>
+								{% endif %}
+<script>
+
+$(document).ready(function(){
+var url = "http://127.0.0.1:8000/api/"
+var endpoints = { myaccount:"myaccount/?format=json",
+				  get_spp:"currentmyspp/?format=json",
+				  users_post:"users/"
+                }
+
+$('#submit_request').click(function(e){
+e.preventDefault()
+var data_string = $('#register_form').serialize()
+$.ajax({
+type:"POST",
+url:url+endpoints.users_post,
+cache:false,
+data:data_string,
+success:function (data){
+swal("Sukses", "Menambah Data Sukses", "success");
+
+}
+})
+
+})
+
+
+})
+
+</script>
+
+
+{% endblock %}

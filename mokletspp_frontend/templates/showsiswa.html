@@ -1,0 +1,65 @@
+{% extends 'base_url.html' %}
+{% block showpetugas %}
+<div class="main-panel">
+			<div class="content">
+				<div class="page-inner">
+					<div class="page-header">
+						<h4 class="page-title">Tabel</h4>
+						<ul class="breadcrumbs">
+							<li class="nav-home">
+								<a href="#">
+									<i class="flaticon-home"></i>
+								</a>
+							</li>
+							<li class="separator">
+								<i class="flaticon-right-arrow"></i>
+							</li>
+							<li class="nav-item">
+								<a href="#">Dashboard</a>
+							</li>
+							<li class="separator">
+								<i class="flaticon-right-arrow"></i>
+							</li>
+							<li class="nav-item">
+								<a href="#">Data Siswa</a>
+							</li>
+						</ul>
+					</div>
+
+<div class="row">
+	<div class="col-md-12">
+							<div class="card">
+								<div class="card-header">
+									<div class="card-title">Tabel Siswa</div>
+								</div>
+								<div class="card-body">
+									<table class="table table-hover">
+										<thead>
+											<tr>
+												<th scope="col">#</th>
+												<th scope="col">Nama Siswa</th>
+												<th scope="col">Username</th>
+												<th scope="col">Email</th>
+												<th scope="col">Tunggakan</th>
+											</tr>
+										</thead>
+										<tbody>
+										{% for s in siswa %}
+											<tr>
+												<td>1</td>
+												<td>{{ s.nama_siswa }}</td>
+												<td>{{ s.user.username }}</td>
+												<td>{{ s.user.email }}</td>
+												<td> Rp. 100.000,00</td>
+											</tr>
+										{% endfor %}
+										</tbody>
+									</table>
+								</div>
+							</div>
+		</div>
+	</div>
+				</div>
+			</div>
+</div>
+{% endblock %}

@@ -1,0 +1,98 @@
+{% extends 'base_url.html' %}
+{% block mysiswa_form %}
+<div class="main-panel">
+			<div class="content">
+				<div class="page-inner">
+					<div class="page-header">
+						<h4 class="page-title">Spp</h4>
+						<ul class="breadcrumbs">
+							<li class="nav-home">
+								<a href="#">
+									<i class="flaticon-home"></i>
+								</a>
+							</li>
+							<li class="separator">
+								<i class="flaticon-right-arrow"></i>
+							</li>
+							<li class="nav-item">
+								<a href="#">Dashboard</a>
+							</li>
+							<li class="separator">
+								<i class="flaticon-right-arrow"></i>
+							</li>
+							<li class="nav-item">
+								<a href="#">Tambah Spp</a>
+							</li>
+						</ul>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="card">
+								<div class="card-header">
+									<div class="card-title">Tambah SPP</div>
+								</div>
+						{% if authenticated.role == "admin" or authenticated.role == "petugas" %}
+								<form method="post" id="spp_form" class="card-body">
+									{% csrf_token %}
+                                  	<div class="form-group">
+										<label for="Year">Tahun</label>
+										<select class="form-control" name="tahun" id="Year">
+											<option value="{{ date_now.year }}">{{ date_now.year }}</option>
+											{% for year in range_year %}
+											<option value="{{ year }}"> {{ year }}</option>
+											{% endfor %}
+										</select>
+									</div>
+									<div class="form-group">
+										<label for="Month">Bulan</label>
+										<select class="form-control" name="bulan" id="Month">
+											<option value="{{ date_now.month }}"> {{ date_now|date:'F' }}</option>
+											{% for m in months %}
+											<option value="{{ forloop.counter }}"> {{ m }}</option>
+											{% endfor %}
+										</select>
+									</div>
+									 <div class="form-group">
+										<label for="nis">Nominal</label>
+										<input type="number" name="nominal" class="form-control" id="nis" >
+									</div>
+								<div class="card-action">
+									<button type="submit" id="submit_spp" class="btn btn-primary">Submit</button>
+									<button class="btn btn-danger">Cancel</button>
+								</div>
+                                </form>
+								<script>
+									$(document).ready(function(){
+								var url = "http://127.0.0.1:8000/api/"
+								var endpoints = url+"spp/"
+								$('#submit_spp').click(function(e){
+								e.preventDefault()
+								var data = $('#spp_form').serialize()
+									$.ajax({
+									url:endpoints,
+									type:"POST",
+									data:data,
+									success:function(data){
+										if(data.status == 200){
+											swal("Sukses","Menambah Data Spp Berhasil","success")
+										} else {
+											swal("Gagal",data.message,"error")
+										}
+									}
+									})
+
+								})
+									})
+								</script>
+								{% else %}
+								<script>
+								swal('Akses Ditolak', 'Anda Bukan Admin','error')
+								</script>
+								{% endif %}
+							</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+</div>
+{% endblock %}

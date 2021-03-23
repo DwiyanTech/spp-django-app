@@ -1,0 +1,112 @@
+{% extends 'base_url.html' %}
+{% block showpetugas %}
+<div class="main-panel">
+			<div class="content">
+				<div class="page-inner">
+					<div class="page-header">
+						<h4 class="page-title">Tabel</h4>
+						<ul class="breadcrumbs">
+							<li class="nav-home">
+								<a href="#">
+									<i class="flaticon-home"></i>
+								</a>
+							</li>
+							<li class="separator">
+								<i class="flaticon-right-arrow"></i>
+							</li>
+							<li class="nav-item">
+								<a href="#">Dashboard</a>
+							</li>
+							<li class="separator">
+								<i class="flaticon-right-arrow"></i>
+							</li>
+							<li class="nav-item">
+								<a href="#">Data Petugas</a>
+							</li>
+						</ul>
+					</div>
+
+<div class="row">
+	<div class="col-md-12">
+							<div class="card">
+								<div class="card-header">
+									<div class="card-title">Tabel Petugas</div>
+								</div>
+								<div class="card-body">
+									<table class="table table-hover">
+										<thead>
+											<tr>
+												<th scope="col">#</th>
+												<th scope="col">Username</th>
+												<th scope="col">Email</th>
+												<th scope="col">Role</th>
+                                                <th scope="col">Action</th>
+											</tr>
+										</thead>
+										<tbody>
+										{% for u in user %}
+											<tr>
+												<td>1</td>
+												<td>{{ u.username }}</td>
+												<td>{{ u.email }}</td>
+												<td>{{ u.role }}</td>
+                                                <td><button onclick="deleteUser({{ u.id_user }})" class="btn btn-danger" >Delete</button>
+												<button class="btn btn-info" onclick="editUser({{ u.id_user }})" id="{{ s.id_spp }}">Edit</button>
+												</td>
+											</tr>
+										{% endfor %}
+										</tbody>
+									</table>
+								</div>
+							</div>
+		</div>
+	</div>
+				</div>
+			</div>
+</div>
+	{% if authenticated.role == "siswa" %}
+					<script>
+								swal('Akses Ditolak', 'Anda Bukan Admin','error')
+								</script>
+								{% endif %}
+<script>
+
+function deleteUser(id_user){
+var url = "http://127.0.0.1:8000/api/"
+var endpoints = url+"users/"+id_user+"/"
+var token = '{{ csrf_token }}'
+
+swal({
+  title: "Apakah Anda Yakin?",
+  text: "Ingin Menghapus Data Ini?",
+  icon: "warning",
+  buttons: true,
+  dangerMode: true,
+})
+.then((willDelete) => {
+  if (willDelete) {
+  $.ajax({
+url:endpoints,
+type:"DELETE",
+headers: {'X-CSRFTOKEN': token },
+success:function(data){
+window.location.href = document.URL;
+}
+})
+  } else {
+    swal("Data Tidak Tihapus");
+  }
+});
+
+}
+
+
+function editUser(id_user){
+var url = "http://127.0.0.1:8000/dashboard/"
+var endpoints = url+"edit_user/"+id_user
+window.location.href = endpoints;
+}
+
+</script>
+
+{% endblock %}

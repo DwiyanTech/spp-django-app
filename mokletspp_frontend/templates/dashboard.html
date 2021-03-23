@@ -1,0 +1,146 @@
+{% extends 'base_url.html' %}
+
+{% block content_dashboard %}
+<div class="main-panel">
+			<div class="content">
+				<div class="page-inner">
+					<div class="page-header">
+						<h4 class="page-title">Dashboard</h4>
+						<div class="btn-group btn-group-page-header ml-auto">
+							<button type="button" class="btn btn-light btn-round btn-page-header-dropdown dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<i class="fa fa-ellipsis-h"></i>
+							</button>
+							<div class="dropdown-menu">
+								<div class="arrow"></div>
+								<a class="dropdown-item" href="#">Action</a>
+								<a class="dropdown-item" href="#">Another action</a>
+								<a class="dropdown-item" href="#">Something else here</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="#">Separated link</a>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-sm-6 col-md-3">
+
+							<div class="card card-stats card-round">
+								<div class="card-body ">
+									<div class="row align-items-center">
+										<div class="col-icon">
+											<div class="icon-big text-center icon-primary bubble-shadow-small">
+												<i class="fas fa-users"></i>
+											</div>
+										</div>
+										<div class="col col-stats ml-3 ml-sm-0">
+											<div class="numbers">
+												<p class="card-category">Waktu Server</p>
+												<h4 id="server_time" class="card-title">10/20/2003</h4>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6 col-md-3">
+							<div class="card card-stats card-round">
+								<div class="card-body">
+									<div class="row align-items-center">
+										<div class="col-icon">
+											<div class="icon-big text-center icon-info bubble-shadow-small">
+												<i class="far fa-newspaper"></i>
+											</div>
+										</div>
+										<div class="col col-stats ml-3 ml-sm-0">
+											<div class="numbers">
+												<p class="card-category">Total Tunggakan</p>
+												<h4 id="total_debt" class="card-title">Rp.100.000</h4>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6 col-md-3">
+							<div class="card card-stats card-round">
+								<div class="card-body">
+									<div class="row align-items-center">
+										<div class="col-icon">
+											<div class="icon-big text-center icon-success bubble-shadow-small">
+												<i class="far fa-chart-bar"></i>
+											</div>
+										</div>
+										<div class="col col-stats ml-3 ml-sm-0">
+											<div class="numbers">
+												<p class="card-category">Username</p>
+												<h4	id="info_username" class="card-title">10/03/2021 15:00</h4>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6 col-md-3">
+							<div class="card card-stats card-round">
+								<div class="card-body">
+									<div class="row align-items-center">
+										<div class="col-icon">
+											<div class="icon-big text-center icon-secondary bubble-shadow-small">
+												<i class="far fa-check-circle"></i>
+											</div>
+										</div>
+										<div class="col col-stats ml-3 ml-sm-0">
+											<div class="numbers">
+												<p class="card-category">Status</p>
+												<h4 id="status_role" class="card-title">-</h4>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="alert alert-danger" id="info_data" role="alert">
+								Silahkan Lengkapi Data Anda Terlebih Dahulu Di Menu Profil Sebelum Anda Melanjutkan ke Menu Lainnya
+							</div>
+				</div>
+			</div>
+</div>
+
+<script>
+
+$(document).ready(function(){
+var url = "http://127.0.0.1:8000/api/"
+var endpoints = { myaccount:"myaccount/?format=json",
+				  get_spp:"currentmyspp/?format=json"
+                }
+$.ajax({
+url:url+endpoints.myaccount,
+cache:false,
+success:function (data){
+$('#info_username').html(data.data.user.username)
+$('#status_role').html(data.data.user.role)
+$('#server_time').html(data.now_date)
+if(data.profile != 'null'){
+$('#info_data').remove()
+}
+}
+})
+
+$.ajax({
+url:url+endpoints.get_spp,
+cache:false,
+success: function (data){
+if(data.data.total_tunggakan != null){
+$('#total_debt').html(data.data.total_tunggakan)
+} else {
+$('#total_debt').html("-")
+}}
+
+})
+
+})
+
+</script>
+
+{% endblock %}

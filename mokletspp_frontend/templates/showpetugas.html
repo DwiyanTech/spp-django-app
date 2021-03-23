@@ -1,0 +1,70 @@
+{% extends 'base_url.html' %}
+{% block showpetugas %}
+<div class="main-panel">
+			<div class="content">
+				<div class="page-inner">
+					<div class="page-header">
+						<h4 class="page-title">Tabel</h4>
+						<ul class="breadcrumbs">
+							<li class="nav-home">
+								<a href="#">
+									<i class="flaticon-home"></i>
+								</a>
+							</li>
+							<li class="separator">
+								<i class="flaticon-right-arrow"></i>
+							</li>
+							<li class="nav-item">
+								<a href="#">Dashboard</a>
+							</li>
+							<li class="separator">
+								<i class="flaticon-right-arrow"></i>
+							</li>
+							<li class="nav-item">
+								<a href="#">Data Petugas</a>
+							</li>
+						</ul>
+					</div>
+
+<div class="row">
+	<div class="col-md-12">
+							<div class="card">
+								<div class="card-header">
+									<div class="card-title">Tabel Petugas</div>
+								</div>
+								<div class="card-body">
+									<table class="table table-hover">
+										<thead>
+											<tr>
+												<th scope="col">#</th>
+												<th scope="col">Nama Petugas</th>
+												<th scope="col">Username</th>
+												<th scope="col">Email</th>
+												<th scope="col">Role Petugas</th>
+											</tr>
+										</thead>
+										<tbody>
+										{% for p in petugas %}
+											<tr>
+												<td>1</td>
+												<td>{{ p.nama_petugas }}</td>
+												<td>{{ p.user.username }}</td>
+												<td>{{ p.user.email }}</td>
+												<td>{{ p.user.role }}</td>
+											</tr>
+										{% endfor %}
+										</tbody>
+									</table>
+								</div>
+							</div>
+		</div>
+	</div>
+					{% if authenticated.role == "siswa" %}
+					<script>
+								swal('Akses Ditolak', 'Anda Bukan Admin','error')
+								</script>
+								{% endif %}
+				</div>
+			</div>
+</div>
+{% endblock %}

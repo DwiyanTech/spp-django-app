@@ -1,0 +1,115 @@
+
+
+{% extends 'base_url.html' %}
+
+{% block show_spp %}
+
+<div class="main-panel">
+			<div class="content">
+				<div class="page-inner">
+					<div class="page-header">
+						<h4 class="page-title">Tabel</h4>
+						<ul class="breadcrumbs">
+							<li class="nav-home">
+								<a href="#">
+									<i class="flaticon-home"></i>
+								</a>
+							</li>
+							<li class="separator">
+								<i class="flaticon-right-arrow"></i>
+							</li>
+							<li class="nav-item">
+								<a href="#">Dashboard</a>
+							</li>
+							<li class="separator">
+								<i class="flaticon-right-arrow"></i>
+							</li>
+							<li class="nav-item">
+								<a href="#">Data SPP</a>
+							</li>
+						</ul>
+					</div>
+
+<div class="row">
+	<div class="col-md-12">
+							<div class="card">
+								<div class="card-header">
+									<div class="card-title">Tabel SPP</div>
+								</div>
+								<div class="card-body">
+									<table class="table table-hover">
+										<thead>
+											<tr>
+												<th scope="col">#</th>
+												<th scope="col">Tahun SPP</th>
+												<th scope="col">Bulan SPP</th>
+												<th scope="col">Nominal</th>
+												<th scope="col">Nama Petugas</th>
+												<th scope="col">Action</th>
+											</tr>
+										</thead>
+										<tbody>
+										{% for s in spp %}
+											<tr>
+												<td> {{ forloop.counter }}</td>
+												<td>{{ s.tahun }}</td>
+												<td>{{ s.bulan }}</td>
+												<td>{{ s.nominal }}</td>
+												<td>{{ s.petugas.nama_petugas }}</td>
+												<td><button onclick="deleteSpp({{ s.id_spp }})" class="btn btn-danger" >Delete</button>
+												<button class="btn btn-info" onclick="editSpp({{ s.id_spp }})" id="{{ s.id_spp }}">Edit</button>
+												</td>
+											</tr>
+										{% endfor %}
+										</tbody>
+									</table>
+								</div>
+							</div>
+		</div>
+	</div>
+				</div>
+			</div>
+</div>
+
+	{% if authenticated.role == "siswa" %}
+					<script>
+								swal('Akses Ditolak', 'Anda Bukan Admin','error')
+								</script>
+								{% endif %}
+
+<script>
+function deleteSpp(id_spp){
+data = {csrfmiddlewaretoken:"{{ csrf_token }}"};
+var url = "http://127.0.0.1:8000/api/"
+var endpoints = url+"spp/"+id_spp+"/"
+var token = '{{ csrf_token }}'
+
+swal({
+  title: "Apakah Anda Yakin?",
+  text: "Ingin Menghapus Data Ini?",
+  icon: "warning",
+  buttons: true,
+  dangerMode: true,
+})
+.then((willDelete) => {
+  if (willDelete) {
+  $.ajax({
+url:endpoints,
+type:"DELETE",
+headers: {'X-CSRFTOKEN': token },
+success:function(data){
+window.location.href = document.URL;
+}
+})
+  } else {
+    swal("Your imaginary file is safe!");
+  }
+});
+}
+function editSpp(id_spp){
+var url = "http://127.0.0.1:8000/dashboard/edit_spp/"+id_spp
+window.location.href = url;
+}
+</script>
+
+{% endblock %}
