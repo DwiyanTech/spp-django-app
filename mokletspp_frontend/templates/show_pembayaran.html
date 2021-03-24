@@ -34,7 +34,19 @@
 	<div class="col-md-12">
 							<div class="card">
 								<div class="card-header">
-									<div class="card-title">Tabel Pembayaran</div>
+									<div class="card-head-row">
+										<div class="card-title">Tabel Pembayaran</div>
+										{% if authenticated.role == "admin" %}
+										<div class="card-tools">
+											<a href="http://127.0.0.1:8000/dashboard/generate_laporan" class="btn btn-info btn-border btn-round btn-sm mr-2">
+												<span class="btn-label">
+													<i class="fa fa-pencil"></i>
+												</span>
+												Generate Laporan
+											</a>
+										</div>
+										{% endif  %}
+									</div>
 								</div>
 								<div class="card-body">
 									<table class="table table-hover">

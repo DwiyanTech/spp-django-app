@@ -15,13 +15,29 @@ class UpdateUserViewSet(viewsets.ModelViewSet):
     queryset = CustomUserAkun.objects.all()
 
 
+class UpdatePetugasViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Petugas.objects.all()
+    serializer_class = UpdatePetugasSerializer
+
+
+class UpdateSiswaViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Siswa.objects.all()
+    serializer_class = UpdateSiswaSerializer
+
+
 class PetugasViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_class = PetugasSerializers
 
     def create(self, request, *args, **kwargs):
         try:
-            serializer = self.get_serializer(data=request.data)
+            user_req = self.request.user
+            print(user_req.id_user)
+            user = CustomUserAkun.objects.get(id_user=user_req.id_user)
+            data = {'user':user.id_user, 'nama_petugas':request.data['nama_petugas']}
+            serializer = self.get_serializer(data=data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return response.Response(json_response.success_response("Menambah Data Berhasil"))
@@ -119,7 +135,12 @@ class SiswaViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         try:
-            serializer = self.get_serializer(data=request.data)
+            user_req = self.request.user
+            print(user_req.id_user)
+            user = CustomUserAkun.objects.get(id_user=user_req.id_user)
+            data = {"user": user.id_user, 'nisn': request.data['nisn'], 'nis': request.data['nis'],
+                    'nama_siswa': request.data['nama_siswa']}
+            serializer = self.get_serializer(data=data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return response.Response(json_response.success_response("Menambah Data Berhasil"))
@@ -226,9 +247,11 @@ class FetchMySppViewSets(viewsets.ModelViewSet):
         user = CustomUserAkun.objects.get(id_user=user_req.id_user)
         if user.role == "siswa":
             siswa = Siswa.objects.get(user=user_req)
-            pembayaran_angsuran = Pembayaran.objects.filter(siswa=siswa).exclude(status="menunggu")
+            pembayaran_angsuran = Pembayaran.objects.filter(siswa=siswa).filter(status='dikonfirmasi')
+            print(pembayaran_angsuran)
             serialize_pembayaran = PembayaranSerializers(pembayaran_angsuran, many=True)
             for angsuran in pembayaran_angsuran:
+                print(angsuran.jumlah_bayar)
                 total_nominal_pembayaran.append(angsuran.jumlah_bayar)
             pembayaran = Pembayaran.objects.filter(siswa=siswa).filter(status="dikonfirmasi")
             for p in pembayaran:
@@ -241,10 +264,11 @@ class FetchMySppViewSets(viewsets.ModelViewSet):
             for s in spp:
                 total_spp.append(s.nominal)
             total = sum(total_all_spp) - sum(total_nominal_pembayaran)
+            print(sum(total_all_spp))
             if total < 0:
                 total_penjumlahan = 0
             else:
-                total_penjumlahan =total
+                total_penjumlahan = total
             sisa_spp = {"total_tunggakan": total_penjumlahan, "spp": serializer.data,
                         "pembayaran": serialize_pembayaran.data}
             return response.Response(json_response.success_response(sisa_spp))

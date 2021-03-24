@@ -40,7 +40,7 @@
 												<th scope="col">Nama Petugas</th>
 												<th scope="col">Username</th>
 												<th scope="col">Email</th>
-												<th scope="col">Role Petugas</th>
+												<th scope="col">Action</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -50,7 +50,9 @@
 												<td>{{ p.nama_petugas }}</td>
 												<td>{{ p.user.username }}</td>
 												<td>{{ p.user.email }}</td>
-												<td>{{ p.user.role }}</td>
+												<td><button onclick="deletePetugas({{ p.id_petugas }})" class="btn btn-danger" >Delete</button>
+												<button class="btn btn-info" onclick="editPetugas({{p.id_petugas}})" id="{{ s.id_spp }}">Edit</button>
+												</td>
 											</tr>
 										{% endfor %}
 										</tbody>
@@ -67,4 +69,45 @@
 				</div>
 			</div>
 </div>
+
+
+<script>
+function deletePetugas(id_petugas){
+data = {csrfmiddlewaretoken:"{{ csrf_token }}"};
+var url = "http://127.0.0.1:8000/api/"
+var endpoints = url+"petugas/"+id_petugas+"/"
+var token = '{{ csrf_token }}'
+
+swal({
+  title: "Apakah Anda Yakin?",
+  text: "Ingin Menghapus Data Ini?",
+  icon: "warning",
+  buttons: true,
+  dangerMode: true,
+})
+.then((willDelete) => {
+  if (willDelete) {
+  $.ajax({
+url:endpoints,
+type:"DELETE",
+headers: {'X-CSRFTOKEN': token },
+success:function(data){
+window.location.href = document.URL;
+}
+})
+  } else {
+    swal("Data Anda Aman");
+  }
+});
+}
+
+function editPetugas(id_petugas){
+
+var url = "http://127.0.0.1:8000/"
+var endpoints = url+"dashboard/edit_petugas/"+id_petugas
+window.location.href = endpoints;
+
+}
+</script>
+
 {% endblock %}

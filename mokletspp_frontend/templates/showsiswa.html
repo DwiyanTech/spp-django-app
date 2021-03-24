@@ -21,7 +21,7 @@
 								<i class="flaticon-right-arrow"></i>
 							</li>
 							<li class="nav-item">
-								<a href="#">Data Siswa</a>
+								<a href="#">Data Petugas</a>
 							</li>
 						</ul>
 					</div>
@@ -40,7 +40,8 @@
 												<th scope="col">Nama Siswa</th>
 												<th scope="col">Username</th>
 												<th scope="col">Email</th>
-												<th scope="col">Tunggakan</th>
+												<th scope="col">NISN</th>
+												<th scope="col">Action</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -50,7 +51,10 @@
 												<td>{{ s.nama_siswa }}</td>
 												<td>{{ s.user.username }}</td>
 												<td>{{ s.user.email }}</td>
-												<td> Rp. 100.000,00</td>
+												<td>{{ s.nisn }}</td>
+												<td><button onclick="deleteSiswa('{{ s.nisn }}')" class="btn btn-danger" >Delete</button>
+												<button class="btn btn-info" onclick="editSiswa('{{ s.nisn }}')" id="{{ s.nisn }}">Edit</button>
+												</td>
 											</tr>
 										{% endfor %}
 										</tbody>
@@ -59,7 +63,53 @@
 							</div>
 		</div>
 	</div>
+					{% if authenticated.role == "siswa" %}
+					<script>
+								swal('Akses Ditolak', 'Anda Bukan Admin','error')
+								</script>
+								{% endif %}
 				</div>
 			</div>
 </div>
+
+
+<script>
+function deleteSiswa(nisn){
+data = {csrfmiddlewaretoken:"{{ csrf_token }}"};
+var url = "http://127.0.0.1:8000/api/"
+var endpoints = url+"siswa/"+nisn+"/"
+var token = '{{ csrf_token }}'
+
+swal({
+  title: "Apakah Anda Yakin?",
+  text: "Ingin Menghapus Data Ini?",
+  icon: "warning",
+  buttons: true,
+  dangerMode: true,
+})
+.then((willDelete) => {
+  if (willDelete) {
+  $.ajax({
+url:endpoints,
+type:"DELETE",
+headers: {'X-CSRFTOKEN': token },
+success:function(data){
+window.location.href = document.URL;
+}
+})
+  } else {
+    swal("Data Anda Tidak Terhapus");
+  }
+});
+}
+
+function editSiswa(nisn){
+
+var url = "http://127.0.0.1:8000/"
+var endpoints = url+"dashboard/edit_siswa/"+nisn
+window.location.href = endpoints;
+
+}
+</script>
+
 {% endblock %}

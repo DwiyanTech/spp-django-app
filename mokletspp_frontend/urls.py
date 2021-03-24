@@ -14,5 +14,11 @@ urlpatterns = [
     path(r'dashboard/show_user', views.show_user, name="Show Bayar"),
     path(r'dashboard/edit_user/<id_user>', views.edit_user, name="Show Bayar"),
     path(r'dashboard/generate_laporan', views.generate_laporan, name="Generate Laporam"),
+    path(r'dashboard/show_petugas', views.show_petugas, name="Show Petugas"),
+    path(r'dashboard/show_siswa', views.show_siswa, name="Show Siswa"),
+    path(r'dashboard/edit_petugas/<id_petugas>', views.edit_petugas, name="Edit Petugas"),
+    path(r'dashboard/edit_siswa/<nisn>', views.edit_siswa, name="Edit Siswa"),
+    path(r'dashboard/add_siswa', views.add_siswa, name="Add Siswa"),
+    path(r'dashboard/add_petugas', views.add_petugas, name="Add Siswa"),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework_api'))
 ]

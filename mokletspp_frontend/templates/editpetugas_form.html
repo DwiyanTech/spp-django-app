@@ -1,0 +1,85 @@
+{% extends 'base_url.html' %}
+{% block registeruser_form %}
+<div class="main-panel">
+			<div class="content">
+				<div class="page-inner">
+					<div class="page-header">
+						<h4 class="page-title">Profile</h4>
+						<ul class="breadcrumbs">
+							<li class="nav-home">
+								<a href="#">
+									<i class="flaticon-home"></i>
+								</a>
+							</li>
+							<li class="separator">
+								<i class="flaticon-right-arrow"></i>
+							</li>
+							<li class="nav-item">
+								<a href="#">Dashboard</a>
+							</li>
+							<li class="separator">
+								<i class="flaticon-right-arrow"></i>
+							</li>
+							<li class="nav-item">
+								<a href="#">Profileku</a>
+							</li>
+						</ul>
+					</div>
+
+
+					<div class="row">
+						<div class="col-md-6">
+							<div class="card">
+								<div class="card-header">
+									<div class="card-title">Edit Petugas</div>
+								</div>
+								<form id="petugas_form" method="post" action="" class="card-body">
+									{% csrf_token %}
+                                     <div class="form-group">
+										<label for="nama_petugas">Nama Petugas</label>
+										<input type="text" name="nama_petugas"  class="form-control" value="{{ petugas.nama_petugas }}" id="nama_petugas" placeholder="Username">
+									</div>
+								<div class="card-action">
+									<button id="submit_request" class="btn btn-primary">Submit</button>
+									<button class="btn btn-danger">Cancel</button>
+								</div>
+                                </form>
+							</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+</div>
+
+<script>
+
+			$(document).ready(function(){
+								var url = "http://127.0.0.1:8000/api/"
+								var endpoints = url+"update_petugas/"+{{ petugas.id_petugas }}+'/'
+								var token = '{{ csrf_token }}'
+								$('#submit_request').click(function(e){
+								e.preventDefault()
+								var data = $('#petugas_form').serialize()
+									$.ajax({
+									url:endpoints,
+									type:"PUT",
+									data:data,
+									headers: {'X-CSRFTOKEN': token },
+									success:function(data){
+									swal("Sukses","Mengedit Data Petugas Berhasil","success")
+									},
+									 error: function(XMLHttpRequest, textStatus, errorThrown) {
+                                 alert("Status: " + textStatus); alert("Error: " + errorThrown);
+                                    }
+									})
+
+								})
+									})
+
+
+
+
+</script>
+
+
+{% endblock %}

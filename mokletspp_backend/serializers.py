@@ -31,6 +31,37 @@ class UpdateUserSerializers(serializers.ModelSerializer):
             raise Exception
 
 
+class UpdateSiswaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Siswa
+        fields = ['nama_siswa','nis']
+
+    def update(self, instance, validated_data):
+        try:
+            instance.nama_siswa = validated_data['nama_siswa']
+            instance.nis = validated_data['nis']
+            instance.save()
+            return instance
+        except Exception as e:
+            print(e)
+            raise Exception
+
+
+class UpdatePetugasSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Petugas
+        fields = ["nama_petugas"]
+
+    def update(self, instance, validated_data):
+        try:
+            instance.nama_petugas = validated_data['nama_petugas']
+            instance.save()
+            return instance
+        except Exception as e:
+            print(e)
+            raise Exception
+
+
 class AddUserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(required=True,
                                      validators=[validators.UniqueValidator(queryset=CustomUserAkun.objects.all())])

@@ -7,26 +7,22 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout as logout_user
-
-# Create your views here.
 from django.utils.translation import activate
-
-from mokletspp_backend.models import CustomUserAkun, Spp, Pembayaran, Siswa
+from mokletspp_backend.models import CustomUserAkun, Spp, Pembayaran, Siswa, Petugas
 from mokletsppfix.settings import LOGIN_URL
 
 
 @login_required(login_url=LOGIN_URL)
 def generate_laporan(request):
     user_authenticated = CustomUserAkun.objects.get(id_user=request.user.id_user)
-    if user_authenticated.role == "admin" or user_authenticated.role == "siswa":
+    if user_authenticated.role == "admin" or user_authenticated.role == "petugas":
         response = HttpResponse(content_type='application/ms-excel')
         name_file = f"Data_Pembayaran_{datetime.datetime.now()} "
         response['Content-Disposition'] = f'attachment; filename="{name_file}.xls"'
         wb = xlwt.Workbook(encoding='utf-8')
         ws = wb.add_sheet("Pembayaran")
         row_start = 0
-        font_style = xlwt.XFStyle()
-        font_style.bold = True
+        font_style = xlwt.easyxf('font: bold 1')
         columns = ["No", "Tahun Spp", "Bulan Spp", "Jumlah Yang Dibayar", "Nominal SPP"
             , "NISN", "Status", "Tanggal Bayar"]
         for col_num in range(len(columns)):
@@ -53,7 +49,8 @@ def generate_laporan(request):
 
 @login_required(login_url=LOGIN_URL)
 def dashboard(request):
-    data = {}
+    user = CustomUserAkun.objects.get(id_user=request.user.id_user)
+    data = {'authenticated': user}
     return render(request, 'dashboard.html', data)
 
 
@@ -179,3 +176,70 @@ def show_pembayaran(request):
         pembayaran_angsuran = Pembayaran.objects.all()
         data['pembayaran'] = pembayaran_angsuran
         return render(request, 'show_pembayaran.html', data)
+
+
+@login_required(login_url=LOGIN_URL)
+def show_petugas(request):
+    user = CustomUserAkun.objects.get(id_user=request.user.id_user)
+    data = {'authenticated': user}
+    if user.role == "admin":
+        petugas = Petugas.objects.all()
+        data['petugas'] = petugas
+        return render(request, 'showpetugas.html', data)
+    else:
+        return redirect(dashboard)
+
+
+@login_required(login_url=LOGIN_URL)
+def edit_petugas(request, id_petugas):
+    user = CustomUserAkun.objects.get(id_user=request.user.id_user)
+    data = {'authenticated': user}
+    if user.role == "admin":
+        petugas = Petugas.objects.get(id_petugas=id_petugas)
+        data['petugas'] = petugas
+        return render(request, 'editpetugas_form.html', data)
+    else:
+        return redirect(dashboard)
+
+
+@login_required(login_url=LOGIN_URL)
+def show_siswa(request):
+    user = CustomUserAkun.objects.get(id_user=request.user.id_user)
+    data = {'authenticated': user}
+    if user.role == "admin" or user.role == "petugas":
+        siswa = Siswa.objects.all()
+        data['siswa'] = siswa
+        return render(request, 'showsiswa.html', data)
+    else:
+        return redirect(dashboard)
+
+
+@login_required(login_url=LOGIN_URL)
+def add_siswa(request):
+    user = CustomUserAkun.objects.get(id_user=request.user.id_user)
+    data = {'authenticated': user}
+    if user.role == "siswa":
+        return render(request, 'add_siswa.html', data)
+    else:
+        return redirect(dashboard)
+
+
+@login_required(login_url=LOGIN_URL)
+def add_petugas(request):
+    user = CustomUserAkun.objects.get(id_user=request.user.id_user)
+    data = {'authenticated': user}
+    if user.role == "petugas" or user.role == "admin":
+        return render(request, 'addpetugas.html', data)
+    else:
+        return redirect(dashboard)
+
+@login_required(login_url=LOGIN_URL)
+def edit_siswa(request, nisn):
+    user = CustomUserAkun.objects.get(id_user=request.user.id_user)
+    data = {'authenticated': user}
+    if user.role == "admin":
+        petugas = Siswa.objects.get(nisn=nisn)
+        data['siswa'] = petugas
+        return render(request, 'editsiswa_form.html', data)
+    else:
+        return redirect(dashboard)

@@ -1,0 +1,91 @@
+{% extends 'base_url.html' %}
+{% block registeruser_form %}
+<div class="main-panel">
+			<div class="content">
+				<div class="page-inner">
+					<div class="page-header">
+						<h4 class="page-title">Profile</h4>
+						<ul class="breadcrumbs">
+							<li class="nav-home">
+								<a href="#">
+									<i class="flaticon-home"></i>
+								</a>
+							</li>
+							<li class="separator">
+								<i class="flaticon-right-arrow"></i>
+							</li>
+							<li class="nav-item">
+								<a href="#">Dashboard</a>
+							</li>
+							<li class="separator">
+								<i class="flaticon-right-arrow"></i>
+							</li>
+							<li class="nav-item">
+								<a href="#">Profileku</a>
+							</li>
+						</ul>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="card">
+								<div class="card-header">
+									<div class="card-title">Edit Siswa</div>
+								</div>
+								<form id="siswa_form" method="post" action="" class="card-body">
+									{% csrf_token %}
+                                      <div class="form-group">
+										<label for="nisn">NISN</label>
+										<input type="number" name="nisn"  class="form-control" value="" id="nisn" placeholder="Username">
+									</div>
+                                     <div class="form-group">
+										<label for="nis">Nis</label>
+										<input type="text" name="nis"  class="form-control" value="" id="nis" placeholder="Username">
+									</div>
+                                    <div class="form-group">
+										<label for="nama_siswa">Nama Siswa</label>
+										<input type="text" name="nama_siswa"  class="form-control" id="nama_siswa" placeholder="Username">
+									</div>
+								<div class="card-action">
+									<button id="submit_request" class="btn btn-primary">Submit</button>
+									<button class="btn btn-danger">Cancel</button>
+								</div>
+                                </form>
+							</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+</div>
+
+<script>
+
+			$(document).ready(function(){
+								var url = "http://127.0.0.1:8000/api/"
+								var endpoints = "http://127.0.0.1:8000/api/siswa/"
+								var token = '{{ csrf_token }}'
+								$('#submit_request').click(function(e){
+								e.preventDefault()
+								var data = $('#siswa_form').serialize()
+									$.ajax({
+									url:endpoints,
+									type:"POST",
+									data:data,
+									headers: {'X-CSRFTOKEN': token },
+									success:function(data){
+									swal("Sukses","Mengedit Data Petugas Berhasil","success")
+									},
+									 error: function(XMLHttpRequest, textStatus, errorThrown) {
+                                 alert("Status: " + textStatus); alert("Error: " + errorThrown);
+                                    }
+									})
+
+								})
+									})
+
+
+
+
+</script>
+
+
+{% endblock %}
