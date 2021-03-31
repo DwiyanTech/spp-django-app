@@ -1,6 +1,6 @@
 [![forthebadge](https://forthebadge.com/images/badges/made-with-python.svg)](https://python.com)
 
-## Sipp App - SPP PP
+## Sipp App - SPP APP
 
 ---
 **Our Technology**
@@ -9,7 +9,7 @@
 - Django Rest Framework
 - Pillow 
 - SQLite
-- Python 3.9 Virtual Enviroment
+- Python 3.9 Virtual EnviromentCancel Changes
 
 ---
 **How To Used It**
