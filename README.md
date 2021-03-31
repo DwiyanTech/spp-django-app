@@ -15,7 +15,7 @@
 **How To Used It**
 
 ```bash
-$user@macihne[/path/to/project]:source venv/bin/activate
+$user@machine[/path/to/project]:source venv/bin/activate
 
 $user@machine[/path/to/project]:python manage.py runserver
 ```
