@@ -9,7 +9,7 @@
 - Django Rest Framework
 - Pillow 
 - SQLite
-- Python 3.9 Virtual EnviromentCancel Changes
+- Python 3.9 Virtual Enviroment
 
 ---
 **How To Used It**
