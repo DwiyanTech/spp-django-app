@@ -58,6 +58,7 @@
 												<th scope="col">Jumlah Yang Dibayar</th>
 												<th scope="col">Nominal Spp</th>
 												<th scope="col">NISN Siswa</th>
+												<th scope="col">Nama Siswa</th>
 												<th scope="col">Status</th>
 												<th scope="col">Bukti Pembayaran</th>
 											{% if authenticated.role == "admin" or authenticated.role == "petugas" %}
@@ -74,11 +75,13 @@
 												<td>{{ p.jumlah_bayar }}</td>
 												<td>{{ p.spp.nominal }} </td>
 												<td>{{ p.siswa.nisn }}</td>
+												<td>{{ p.siswa.nama_siswa }}</td>
 												<td>{{ p.status }} </td>
 												<td><a href="/{{ p.bukti_bayar }}"><img border="0" alt="W3Schools" src="/{{ p.bukti_bayar }}" width="100" height="100"></a></td>
 												{% if authenticated.role == "admin" or authenticated.role == "petugas" %}
 												<td><button onclick="editStatus({{ p.id_pembayaran }},'ditolak')" class="btn btn-danger" >Ditolak</button>
 												<button class="btn btn-info" onclick="editStatus({{ p.id_pembayaran }},'dikonfirmasi')" id="{{ s.id_spp }}">Dikonfiramasi</button>
+												<button class="btn btn-warning" onclick="editStatus({{ p.id_pembayaran }},'diangsur')" >Diangsur</button>
 												</td>
 												{% endif %}
 											</tr>

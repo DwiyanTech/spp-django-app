@@ -40,7 +40,6 @@ def generate_laporan(request):
             ws.write(row_start, 5, row.siswa.nisn, font_style)
             ws.write(row_start, 6, row.status, font_style)
             ws.write(row_start, 7, str(row.tgl_bayar), font_style)
-
         wb.save(response)
         return response
     else:
@@ -148,7 +147,12 @@ def edit_spp(request, spp_id):
 def add_pembayaran(request):
     user = CustomUserAkun.objects.get(id_user=request.user.id_user)
     if user.role == 'siswa':
-        all_spp = Spp.objects.all()
+        list_idspp = []
+        siswa = Siswa.objects.get(user=user)
+        pembayaran_angsuran = Pembayaran.objects.filter(siswa=siswa).filter(status="dikonfirmasi")
+        for x in pembayaran_angsuran:
+            list_idspp.append(x.spp.id_spp)
+        all_spp = Spp.objects.exclude(id_spp__in=list_idspp)
         data = {'authenticated': user, "spp": all_spp}
         return render(request, 'addpembayaran_form.html', data)
     else:

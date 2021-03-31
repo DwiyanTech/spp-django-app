@@ -49,7 +49,7 @@ class Pembayaran(models.Model):
     jumlah_bayar = models.IntegerField(blank=True)
     status = models.CharField(max_length=255, default='menunggu')
     spp = models.ForeignKey(Spp, on_delete=models.CASCADE, blank=True, default="")
-    bukti_bayar = models.FileField(upload_to=settings.MEDIAUPLOAD_URL, blank=True)
+    bukti_bayar = models.ImageField(upload_to=settings.MEDIAUPLOAD_URL, blank=True)
 
     class Meta:
         db_table = "tb_pembayaran"
