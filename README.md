@@ -9,13 +9,13 @@
 - Django Rest Framework
 - Pillow 
 - SQLite
-- Python 3.9 Virtual EnviromentCancel Changes
+- Python 3.9 Virtual Enviroment
 
 ---
 **How To Used It**
 
 ```bash
-$user@macihne[/path/to/project]:source venv/bin/activate
+$user@machine[/path/to/project]:source venv/bin/activate
 
 $user@machine[/path/to/project]:python manage.py runserver
 ```
